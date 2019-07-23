@@ -100,18 +100,8 @@ equation
   is the resistance between the last capacity <code>CExt[end]</code> and the
   heat <code>port_b</code>.</p>
   <p align=\"center\"><img src=\"modelica://Buildings/Resources/Images/ThermalZones/ReducedOrder/RC/BaseClasses/ExtMassVarRC/ExtMassVarRC.png\" alt=\"image\"/> </p>
-  </html>",  revisions="<html>
-  <ul>
-  <li>
-  April 27, 2016, by Michael Wetter:<br/>
-  Added graphical connections.
-  </li>
-  <li>
-  April 17, 2015, by Moritz Lauster:<br/>
-  Implemented.
-  </li>
-  </ul>
-  </html>"),  Icon(coordinateSystem(preserveAspectRatio=false,  extent=
+  </html>",  revisions=""),
+              Icon(coordinateSystem(preserveAspectRatio=false,  extent=
   {{-100,-100},{100,120}}), graphics={  Rectangle(extent = {{-86, 60}, {-34, 26}},
    fillColor = {255, 213, 170},
    fillPattern = FillPattern.Solid, lineColor = {175, 175, 175}), Rectangle(
