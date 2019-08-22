@@ -1,8 +1,8 @@
 within RCNetworks.Examples;
-model HighThermalMassWall
+model LowThermalMassWall
   extends Modelica.Icons.Example;
 
-  RCNetworks.HighThermalMassWall wal
+  RCNetworks.LowThermalMassWall  wal
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Blocks.Sources.Step TInt(
     height=5,
@@ -24,6 +24,6 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=1200),
-    __Dymola_Commands(file="modelica://RCNetworks/Resources/Scripts/HighThermalMassWall.mos"
+    __Dymola_Commands(file="modelica://RCNetworks/Resources/Scripts/LowThermalMassWall.mos"
         "Simulate and Plot"));
-end HighThermalMassWall;
+end LowThermalMassWall;

@@ -16,6 +16,8 @@ model Layer
   parameter Modelica.SIunits.Temperature T_start
     "Initial temperature of capacities"
     annotation(Dialog(group="Thermal mass"));
+  parameter Boolean use_externalQ = false
+    "Use external heat flow if True";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     "Thermal heat port"
@@ -40,6 +42,14 @@ model Layer
     "Thermal heat port"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
+  Modelica.Blocks.Interfaces.RealInput QRad(
+    final quantity="Power",
+    final displayUnit="W") if use_externalQ
+    "Solar radiance"
+    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}})));
+
+  Sources.PrescribedHeatFlow heaFlo if use_externalQ
+    annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
 equation
   // Connecting inner elements thermResExt[i]--thermCapExt[i] to n groups
   for i in 1:n loop
@@ -62,6 +72,12 @@ equation
 
   connect(thermResExtRem.port_b, port_b)
     annotation (Line(points={{60,0},{100,0}}, color={191,0,0}));
+  if use_externalQ then
+    connect(QRad, heaFlo.Q_flow)
+    annotation (Line(points={{-120,-80},{-80,-80}}, color={0,0,127}));
+    connect(heaFlo.port, thermCapExt[1].port) annotation (Line(points={{-60,-80},{
+          -40,-80},{-40,-32},{0,-32},{0,-38}}, color={191,0,0}));
+  end if;
   annotation(defaultComponentName = "extWalRC",
   Diagram(coordinateSystem(preserveAspectRatio = false, extent=
   {{-100, -100}, {100, 120}})),           Documentation(info="<html>

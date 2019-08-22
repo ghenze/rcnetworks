@@ -1,0 +1,5 @@
+simulateModel("RCNetworks.Examples.HighThermalMassWall", stopTime=1200, method="dassl", resultFile="HighThermalMassWall");
+createPlot(id=1, position={0, 0, 1653, 728}, y={"wal.TExt", "wal.TInt", "wal.A2.thermCapExt[1].T", "wal.C3.thermCapExt[1].T", 
+"wal.B24.thermCapExt[1].T", "wal.E1.thermCapExt[1].T"}, range={0.0, 1200.0, 18.0, 40.0}, erase=false, grid=true, filename="HighThermalMassWall.mat", colors={{28,108,200}, {238,46,47}, {0,140,72}, {0,0,0}, {217,67,180}, {162,29,33}}, displayUnits={"degC", "degC", "degC", "degC", "degC", "degC"});
+createPlot(id=1, position={0, 0, 1653, 361}, y={"wal.A2.thermCapExt[1].port.Q_flow", "wal.A2.port_a.Q_flow", "wal.A2.port_b.Q_flow"}, range={0.0, 1200.0, -100.0, 250.0}, erase=false, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}, {0,140,72}});
+

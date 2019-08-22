@@ -2,14 +2,17 @@ within RCNetworks;
 model HighThermalMassWall
   extends RCNetworks.BaseClasses.PartialWallIcon;
 
-  RCElements.AirResistanceTemperature A0(R=0.059)
+  RCElements.AirResistanceTemperature A0(
+    R=0.059)
     annotation (Placement(transformation(extent={{-92,-10},{-72,10}})));
   RCElements.Layer A2(
     R={0.076,0.076}/2,
     C={187.22},
-    T_start=T_start)
+    T_start=T_start,
+    use_externalQ=true)
     annotation (Placement(transformation(extent={{-62,-10},{-42,12}})));
-  RCElements.AirResistance B1(R=0.16)
+  RCElements.AirResistance B1(
+    R=0.16)
     annotation (Placement(transformation(extent={{-30,-10},{-12,10}})));
   RCElements.Layer B24(
     R={1.584,1.584}/2,
@@ -39,6 +42,9 @@ model HighThermalMassWall
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
   parameter Modelica.SIunits.Temperature T_start=273.15 + 20
     "Initial temperature of capacities";
+  Modelica.Blocks.Interfaces.RealInput QRad(final quantity="Power", final
+      displayUnit="W") "Solar radiance"
+    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}})));
 equation
   connect(TExt, A0.T)
     annotation (Line(points={{-120,0},{-94,0}}, color={0,0,127}));
@@ -56,6 +62,8 @@ equation
     annotation (Line(points={{18,0},{28,0}}, color={191,0,0}));
   connect(C3.port_b, E1.port_a)
     annotation (Line(points={{48,0},{56,0}}, color={191,0,0}));
+  connect(QRad, A2.QRad) annotation (Line(points={{-120,-80},{-70,-80},{-70,-8},
+          {-64,-8}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end HighThermalMassWall;

@@ -19,13 +19,7 @@ equation
   connect(res.port_a, port_a)
     annotation (Line(points={{-8,0},{-100,0}}, color={191,0,0}));
   annotation (
-  Icon(coordinateSystem(preserveAspectRatio=false), graphics={
-                                          Text(
-          extent={{-144,148},{124,106}},
-          lineColor={0,0,255},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.None,
-          textString="%name")}),
+  Icon(coordinateSystem(preserveAspectRatio=false)),
           Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end AirResistance;
