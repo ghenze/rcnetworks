@@ -1,89 +1,67 @@
-within RCNetworks;
-model NRNC
-  "Wall consisting of variable number of RC elements"
+within RCNetworks.RCElements;
+model Layer
+  "Wall Layer consisting of variable number of RC elements: N C with (N+1) R "
 
-  parameter Integer n(min = 1) "Number of RC-elements";
-  parameter Modelica.SIunits.ThermalResistance RExt[n](
+  parameter Integer n(min = 1) = 1 "Number of C-elements:";
+  parameter Modelica.SIunits.ThermalResistance R[n+1](
     each min=Modelica.Constants.small)
     "Vector of resistors, from port_a to port_b"
     annotation(Dialog(group="Thermal mass"));
-  parameter Modelica.SIunits.ThermalResistance RExtRem(
-    min=Modelica.Constants.small)
-    "Resistance of remaining resistor RExtRem between capacitor n and port_b"
-     annotation(Dialog(group="Thermal mass"));
-  parameter Modelica.SIunits.HeatCapacity CExt[n](
+
+  parameter Modelica.SIunits.HeatCapacity C[n](
     each min=Modelica.Constants.small)
     "Vector of heat capacities, from port_a to port_b"
     annotation(Dialog(group="Thermal mass"));
+
   parameter Modelica.SIunits.Temperature T_start
     "Initial temperature of capacities"
     annotation(Dialog(group="Thermal mass"));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a "interior port"
-    annotation (Placement(transformation(extent={{-70,-10},{-50,10}}),
-    iconTransformation(extent={{-70,-10},{-50,10}})));
-  Modelica.Thermal.HeatTransfer.Components.HeatCapacitor thermCapExt[n](
-    final C=CExt, each T(start=T_start)) "vector of thermal capacitors"
-    annotation (Placement(transformation(extent={{-2,-40},{18,-60}})));
 
-protected
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
+    "Thermal heat port"
+    annotation (Placement(transformation(extent={{-110,-10},{-90,10}}),
+    iconTransformation(extent={{-110,-10},{-90,10}})));
+  Modelica.Thermal.HeatTransfer.Components.HeatCapacitor thermCapExt[n](
+    each T(start=T_start),
+    final C=C)
+    "Vector of thermal capacitors"
+    annotation (Placement(transformation(extent={{-10,-38},{10,-58}})));
+
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor thermResExt[n](
-    final R=RExt)
-    "vector of thermal resistors connecting port_a and capacitors"
-    annotation (Placement(transformation(extent={{-28,-10},{-8,10}})));
+    final R = R[1:n])
+    "Vector of thermal resistors connecting port_a and capacitors"
+    annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor thermResExtRem(
-    final R=RExtRem)
-    "single thermal resistor connecting least capacitor to port_b"
+    final R=R[n + 1])
+    "Single thermal resistor connecting least capacitor to port_b"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 
-public
-  Modelica.Blocks.Interfaces.RealInput Tin "Indoor temperature"
-    annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
-  Modelica.Blocks.Interfaces.RealInput Tou "Outdoor temperature"
-    annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature outTem
-    "Outdoor temperature"
-    annotation (Placement(transformation(extent={{-94,-10},{-74,10}})));
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature indTem
-    "Indoor temperature"
-    annotation (Placement(transformation(extent={{90,50},{70,70}})));
-  Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor qSen "Heat flow sensor"
-    annotation (Placement(transformation(extent={{40,50},{60,70}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow
-    "Heat flow from port_a to port_b as output signal"
-    annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b
+    "Thermal heat port"
+    annotation (Placement(transformation(extent={{90,-10},{110,10}})));
+
 equation
   // Connecting inner elements thermResExt[i]--thermCapExt[i] to n groups
   for i in 1:n loop
     connect(thermResExt[i].port_b,thermCapExt[i].port)
-    annotation (Line(points={{-8,0},{8,0},{8,-40}},  color={191,0,0}));
+    annotation (Line(points={{-20,0},{0,0},{0,-38}}, color={191,0,0}));
   end for;
   // Connecting groups between each other thermCapExt[i] -- thermResExt[i+1]
   for i in 1:n-1 loop
     connect(thermCapExt[i].port,thermResExt[i+1].port_a)
-     annotation (Line(points={{8,-40},{8,-36},{-40,-36},{-40,0},{-28,0}},
+     annotation (Line(points={{0,-38},{0,-20},{-60,-20},{-60,0},{-40,0}},
                                                 color={191,0,0}));
   end for;
   // Connecting first RC element to port_a ,
   // last RC-element to RExtRem and RExtRem to port_b
   connect(port_a,thermResExt[1].port_a)
-    annotation (Line(points={{-60,0},{-60,0},{-40,0},{-40,0},{-28,0}},
-                                                       color={191,0,0}));
+    annotation (Line(points={{-100,0},{-40,0}},        color={191,0,0}));
   connect(thermCapExt[n].port,thermResExtRem.port_a)
-  annotation (Line(points={{8,-40},{8,-36},{20,-36},{20,0},{30,0},{30,0},{40,0}},
+  annotation (Line(points={{0,-38},{0,-20},{18,-20},{18,0},{40,0}},
                                                           color={191,0,0}));
 
-  connect(outTem.T,Tou)
-    annotation (Line(points={{-96,0},{-120,0}}, color={0,0,127}));
-  connect(indTem.T,Tin)  annotation (Line(points={{92,60},{98,60},{98,80},{-120,
-          80}}, color={0,0,127}));
-  connect(qSen.port_b,indTem. port)
-    annotation (Line(points={{60,60},{70,60}}, color={191,0,0}));
-  connect(outTem.port, port_a)
-    annotation (Line(points={{-74,0},{-60,0}}, color={191,0,0}));
-  connect(qSen.port_a, thermResExtRem.port_b) annotation (Line(points={{40,60},
-          {34,60},{34,40},{78,40},{78,0},{60,0}}, color={191,0,0}));
-  connect(qSen.Q_flow,Q_flow)  annotation (Line(points={{50,50},{50,42},{94,42},
-          {94,0},{110,0}}, color={0,0,127}));
+  connect(thermResExtRem.port_b, port_b)
+    annotation (Line(points={{60,0},{100,0}}, color={191,0,0}));
   annotation(defaultComponentName = "extWalRC",
   Diagram(coordinateSystem(preserveAspectRatio = false, extent=
   {{-100, -100}, {100, 120}})),           Documentation(info="<html>
@@ -155,4 +133,4 @@ equation
    smooth = Smooth.None),
    Line(points = {{14, -44}, {-15, -44}}, color = {0, 0, 0}, thickness = 0.5,
    smooth = Smooth.None)}));
-end NRNC;
+end Layer;
