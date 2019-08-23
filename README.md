@@ -26,3 +26,7 @@ Once users get familiar with OpenModelica interface, they can open the RCNetwork
 ## JModelica
 This part will be updated soon.
 
+# Contact
+Yangyang Fu
+
+yangyang.fu@colorado.edu
