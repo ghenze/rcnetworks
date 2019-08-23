@@ -65,5 +65,13 @@ equation
   connect(QRad, A2.QRad) annotation (Line(points={{-120,-80},{-70,-80},{-70,-8},
           {-64,-8}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>
+This is a RC model for a 7-layer high thermal mass wall. 
+Each layer that has mass is modelled as (n+1)RnC.
+The parameter <code>n</code> can be set by users. 
+The defaulted <code>n</code> is set to 1, which means the defaulted layer is modeled as 2R1C.
+</p>
+</html>"));
 end HighThermalMassWall;

@@ -70,5 +70,13 @@ equation
   connect(heaFlo.port, A3.port)
     annotation (Line(points={{-60,-80},{-52,-80},{-52,-10}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>
+This is a RC model for a 7-layer low thermal mass wall. 
+Each layer that has mass is modelled as (n+1)RnC.
+The parameter <code>n</code> can be set by users. 
+The defaulted <code>n</code> is set to 1, which means the defaulted layer is modeled as 2R1C.
+</p>
+</html>"));
 end LowThermalMassWall;

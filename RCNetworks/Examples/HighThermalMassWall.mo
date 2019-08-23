@@ -25,5 +25,10 @@ equation
         coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=1200),
     __Dymola_Commands(file="modelica://RCNetworks/Resources/Scripts/HighThermalMassWall.mos"
-        "Simulate and Plot"));
+        "Simulate and Plot"),
+    Documentation(info="<html>
+<p>
+This example test the model <a href=\"modelica://RCNetworks.HighThermalMassWall\">RCNetworks.HighThermalMassWall</a>.
+</p>
+</html>"));
 end HighThermalMassWall;

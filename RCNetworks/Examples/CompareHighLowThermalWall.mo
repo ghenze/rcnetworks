@@ -34,5 +34,10 @@ equation
         coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=1200),
     __Dymola_Commands(file="modelica://RCNetworks/Resources/Scripts/CompareHighLowThermalWall.mos"
-        "Simulate and Plot"));
+        "Simulate and Plot"),
+    Documentation(info="<html>
+<p>
+This example compares the model <a href=\"modelica://RCNetworks.HighThermalMassWall\">RCNetworks.HighThermalMassWall</a> and <a href=\"modelica://RCNetworks.LowThermalMassWall\">RCNetworks.LowThermalMassWall</a>.
+</p>
+</html>"));
 end CompareHighLowThermalWall;

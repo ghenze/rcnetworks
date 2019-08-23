@@ -27,5 +27,10 @@ equation
   annotation (
   Icon(coordinateSystem(preserveAspectRatio=false)),
           Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>
+This model can be used to represent convective air resistance at exterior and interior wall surfaces.
+</p>
+</html>"));
 end AirResistanceTemperature;

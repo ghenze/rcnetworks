@@ -81,19 +81,24 @@ equation
   annotation(defaultComponentName = "extWalRC",
   Diagram(coordinateSystem(preserveAspectRatio = false, extent=
   {{-100, -100}, {100, 120}})),           Documentation(info="<html>
-  <p><code>ExteriorWall</code> represents heat conduction and heat storage
+  <p><code>Layer</code> represents heat conduction/convection and heat storage
   within walls. It links a variable number <code>n</code> of thermal resistances
   and capacities to a series connection. <code>n</code> thus defines the spatial
   discretization of thermal effects within the wall. All effects are considered
   as one-dimensional normal to the wall&apos;s surface. This model is thought
   for exterior wall elements that contribute to heat transfer to the outdoor.
-  The RC-chain is defined via a vector of capacities <code>CExt[n]</code> and a
-  vector of resistances <code>RExt[n]</code>. Resistances and capacities are
-  connected alternately, starting with the first resistance <code>RExt[1]</code>,
-  from heat <code>port_a</code> to heat <code>port_b</code>. <code>RExtRem</code>
-  is the resistance between the last capacity <code>CExt[end]</code> and the
-  heat <code>port_b</code>.</p>
-  <p align=\"center\"><img src=\"modelica://Buildings/Resources/Images/ThermalZones/ReducedOrder/RC/BaseClasses/ExtMassVarRC/ExtMassVarRC.png\" alt=\"image\"/> </p>
+  The RC-chain is defined via a vector of capacities <code>thermCapExt[n]</code> and a
+  vector of resistances <code>thermResExt[n]</code>. Resistances and capacities are
+  connected alternately, starting with the first resistance <code>thermResExt[1]</code>,
+  from heat <code>port_a</code> to heat <code>port_b</code>. <code>thermResExtRem</code>
+  is the resistance between the last capacity <code>thermCapExt[end]</code> and the
+  heat <code>port_b</code>.
+  </p>
+  <p>
+  The parameter <code>use_externalQ</code> can be used to activate and deactivate the external heat flux connector 
+  <code>QRad</code> by setting to <code>true</code> and <code>false</code>.
+  The heat flow is injected to the first exterior heat capacitor <code>thermCapExt[1]</code>.
+  </p>
   </html>",  revisions=""),
               Icon(coordinateSystem(preserveAspectRatio=false,  extent=
   {{-100,-100},{100,120}}), graphics={  Rectangle(extent = {{-86, 60}, {-34, 26}},

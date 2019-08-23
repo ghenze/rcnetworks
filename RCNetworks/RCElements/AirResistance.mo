@@ -21,5 +21,10 @@ equation
   annotation (
   Icon(coordinateSystem(preserveAspectRatio=false)),
           Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p>
+This is a R model that has no mass that can be used to represent the air gap between layers.
+</p>
+</html>"));
 end AirResistance;

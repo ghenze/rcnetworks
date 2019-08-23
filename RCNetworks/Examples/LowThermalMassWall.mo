@@ -25,5 +25,10 @@ equation
         coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=1200),
     __Dymola_Commands(file="modelica://RCNetworks/Resources/Scripts/LowThermalMassWall.mos"
-        "Simulate and Plot"));
+        "Simulate and Plot"),
+    Documentation(info="<html>
+<p>
+This example test the model <a href=\"modelica://RCNetworks.LowThermalMassWall\">RCNetworks.LowThermalMassWall</a>.
+</p>
+</html>"));
 end LowThermalMassWall;
