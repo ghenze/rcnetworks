@@ -13,7 +13,7 @@ Users can directly download and install the binary distribution in [windows OS](
 ### Install JModelica
 This part will be updated soon.
 
-## Install RCNetWork Package
+## Install RCNetworks Package
 This package can be directly downloaded from the github homepage [here](https://github.com/YangyangFu/rcnetworks). 
 
 # Run Models
