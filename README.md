@@ -8,7 +8,7 @@ To run this package in the local computers, we need follow the following steps:
 ## Install Modelica Environment
 ### Install OpenModelica
 The first open-source Modelica complier introduced here is [OpenModelica](https://openmodelica.org/). 
-Users can directly download and install the binary distribution in [windows OS](https://openmodelica.org/download/download-windows), [mac OS](https://build.openmodelica.org/omc/builds/mac/binaries/) and [Linux](https://openmodelica.org/download/download-linux).
+Users can directly download and install the binary distribution in [windows OS](https://build.openmodelica.org/omc/builds/windows/releases/1.13/2/), [mac OS](https://build.openmodelica.org/omc/builds/mac/binaries/) ("latest-stable.mpkg") and [Linux](https://openmodelica.org/download/download-linux).
 
 ### Install JModelica
 This part will be updated soon.
