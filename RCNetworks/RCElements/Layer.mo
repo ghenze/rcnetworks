@@ -18,6 +18,8 @@ model Layer
     annotation(Dialog(group="Thermal mass"));
   parameter Boolean use_externalQ = false
     "Use external heat flow if True";
+  parameter Boolean use_internalQ = false
+    "Use internal heat flow if True";
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a port_a
     "Thermal heat port"
@@ -42,13 +44,18 @@ model Layer
     "Thermal heat port"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  Modelica.Blocks.Interfaces.RealInput QRad(
+  Modelica.Blocks.Interfaces.RealInput q_ext(
     final quantity="Power",
-    final displayUnit="W") if use_externalQ
-    "Solar radiance"
-    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}})));
+    final displayUnit="W") if use_externalQ "Solar radiance"
+    annotation (Placement(transformation(extent={{-140,-50},{-100,-10}})));
 
-  Sources.PrescribedHeatFlow heaFlo if use_externalQ
+  Sources.PrescribedHeatFlow heaFlo_ext if use_externalQ
+    annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
+  Modelica.Blocks.Interfaces.RealInput q_int(
+    final quantity="Power",
+    final displayUnit="W") if use_internalQ "Solar radiance"
+    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}})));
+  Sources.PrescribedHeatFlow heaFlo_int if use_internalQ
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
 equation
   // Connecting inner elements thermResExt[i]--thermCapExt[i] to n groups
@@ -73,14 +80,29 @@ equation
   connect(thermResExtRem.port_b, port_b)
     annotation (Line(points={{60,0},{100,0}}, color={191,0,0}));
   if use_externalQ then
-    connect(QRad, heaFlo.Q_flow)
-    annotation (Line(points={{-120,-80},{-80,-80}}, color={0,0,127}));
-    connect(heaFlo.port, thermCapExt[1].port) annotation (Line(points={{-60,-80},{
-          -40,-80},{-40,-32},{0,-32},{0,-38}}, color={191,0,0}));
+    connect(q_ext, heaFlo_ext.Q_flow)
+      annotation (Line(points={{-120,-30},{-80,-30}}, color={0,0,127}));
+    connect(heaFlo_ext.port, thermCapExt[1].port)
+      annotation (Line(points={{-60,-30},{0,-30},{0,-38}}, color={191,0,0}));
   end if;
-  annotation(defaultComponentName = "extWalRC",
+
+  if use_internalQ then
+    connect(q_int, heaFlo_int.Q_flow)
+      annotation (Line(points={{-120,-80},{-80,-80}}, color={0,0,127}));
+    connect(heaFlo_int.port, thermCapExt[n].port)
+      annotation (Line(points={{-60,-80},
+          {-40,-80},{-40,-30},{0,-30},{0,-38}}, color={191,0,0}));
+
+  end if;
+ annotation(defaultComponentName = "extWalRC",
   Diagram(coordinateSystem(preserveAspectRatio = false, extent=
-  {{-100, -100}, {100, 120}})),           Documentation(info="<html>
+  {{-100, -100}, {100, 120}}), graphics={Text(
+          extent={{-98,44},{-54,26}},
+          lineColor={28,108,200},
+          textString="Exterior"), Text(
+          extent={{58,44},{102,26}},
+          lineColor={28,108,200},
+          textString="Interior")}),       Documentation(info="<html>
   <p><code>Layer</code> represents heat conduction/convection and heat storage
   within walls. It links a variable number <code>n</code> of thermal resistances
   and capacities to a series connection. <code>n</code> thus defines the spatial
@@ -96,8 +118,13 @@ equation
   </p>
   <p>
   The parameter <code>use_externalQ</code> can be used to activate and deactivate the external heat flux connector 
-  <code>QRad</code> by setting to <code>true</code> and <code>false</code>.
+  <code>q_ext</code> by setting to <code>true</code> and <code>false</code>.
   The heat flow is injected to the first exterior heat capacitor <code>thermCapExt[1]</code>.
+  </p>
+  <p>
+  The parameter <code>use_internalQ</code> can be used to activate and deactivate the external heat flux connector 
+  <code>q_int</code> by setting to <code>true</code> and <code>false</code>.
+  The heat flow is injected to the most interior heat capacitor <code>thermCapExt[n]</code>.
   </p>
   </html>",  revisions=""),
               Icon(coordinateSystem(preserveAspectRatio=false,  extent=

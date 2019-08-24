@@ -2,68 +2,104 @@ within RCNetworks;
 model HighThermalMassWall
   extends RCNetworks.BaseClasses.PartialWallIcon;
 
-  RCElements.AirResistanceTemperature A0(
+  parameter Modelica.SIunits.Temperature T_start=273.15 + 20
+    "Initial temperature of capacities";
+
+  RCElements.Resistance               A0(
     R=0.059)
-    annotation (Placement(transformation(extent={{-92,-10},{-72,10}})));
+    annotation (Placement(transformation(extent={{-84,-10},{-64,10}})));
   RCElements.Layer A2(
     R={0.076,0.076}/2,
     C={187.22},
     T_start=T_start,
     use_externalQ=true)
-    annotation (Placement(transformation(extent={{-62,-10},{-42,12}})));
-  RCElements.AirResistance B1(
-    R=0.16)
-    annotation (Placement(transformation(extent={{-30,-10},{-12,10}})));
+    annotation (Placement(transformation(extent={{-54,-10},{-34,12}})));
+  RCElements.Resistance B1(R=0.16)
+    annotation (Placement(transformation(extent={{-22,-10},{-4,10}})));
   RCElements.Layer B24(
-    R={1.584,1.584}/2,
     C={5.33},
-    T_start=T_start)
-    annotation (Placement(transformation(extent={{-2,-10},{18,12}})));
+    T_start=T_start,
+    R={1.584,1.584}/2)
+    annotation (Placement(transformation(extent={{6,-10},{26,12}})));
   RCElements.Layer C3(
     C={83.21},
     T_start=T_start,
     R={0.125,0.125}/2)
-    annotation (Placement(transformation(extent={{28,-10},{48,12}})));
+    annotation (Placement(transformation(extent={{36,-10},{56,12}})));
   RCElements.Layer E1(
     T_start=T_start,
     R={0.013,0.013},
-    C={25.82}) annotation (Placement(transformation(extent={{56,-10},{76,12}})));
-  RCElements.AirResistanceTemperature E0(R=0.121)
-    annotation (Placement(transformation(extent={{60,40},{80,60}})));
+    use_internalQ=true,
+    C={25.82}) annotation (Placement(transformation(extent={{64,-10},{84,12}})));
+  RCElements.Resistance E0(R=0.121)
+    annotation (Placement(transformation(extent={{80,40},{60,60}})));
 
-  Modelica.Blocks.Interfaces.RealInput TInt(
-    final quantity="ThermodynamicTemperature",
-    final displayUnit="degC")
-    "Indoor temperature"
+  Modelica.Blocks.Interfaces.RealInput T_int(final quantity="ThermodynamicTemperature",
+      final displayUnit="degC") "Indoor temperature"
     annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
-  Modelica.Blocks.Interfaces.RealInput TExt(
-    final quantity="ThermodynamicTemperature",
-    final displayUnit="degC") "Outdoor temperature"
-    annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  parameter Modelica.SIunits.Temperature T_start=273.15 + 20
-    "Initial temperature of capacities";
-  Modelica.Blocks.Interfaces.RealInput QRad(final quantity="Power", final
+  Modelica.Blocks.Interfaces.RealInput T_ext(final quantity="ThermodynamicTemperature",
+      final displayUnit="degC") "Outdoor temperature"
+    annotation (Placement(transformation(extent={{-140,10},{-100,50}})));
+
+  Modelica.Blocks.Interfaces.RealInput q_ext(final quantity="Power", final
+      displayUnit="W") "Solar radiance"
+    annotation (Placement(transformation(extent={{-140,-50},{-100,-10}})));
+  Modelica.Blocks.Interfaces.RealInput q_int(final quantity="Power", final
       displayUnit="W") "Solar radiance"
     annotation (Placement(transformation(extent={{-140,-100},{-100,-60}})));
+  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor senT_ext
+    "Exterior surface temperature sensor"
+    annotation (Placement(transformation(extent={{-50,30},{-30,50}})));
+  Modelica.Blocks.Interfaces.RealOutput Ts_ext(
+    final quantity="ThermodynamicTemperature",
+    final displayUnit="degC")
+   "Exterior surface temperature"
+    annotation (Placement(transformation(extent={{100,70},{120,90}})));
+  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor senT_int
+    "Exterior surface temperature sensor"
+    annotation (Placement(transformation(extent={{76,-70},{96,-50}})));
+  Modelica.Blocks.Interfaces.RealOutput Ts_int(
+    final quantity="ThermodynamicTemperature",
+    final displayUnit="degC")
+    "Interior surface temperature"
+    annotation (Placement(transformation(extent={{100,-70},{120,-50}})));
+  Sources.PrescribedTemperature temReaCon_ext "Temperature connector "
+    annotation (Placement(transformation(extent={{-94,20},{-74,40}})));
+  Sources.PrescribedTemperature temReaCon_int "Temperature connector "
+    annotation (Placement(transformation(extent={{-92,70},{-72,90}})));
 equation
-  connect(TExt, A0.T)
-    annotation (Line(points={{-120,0},{-94,0}}, color={0,0,127}));
-  connect(TInt, E0.T) annotation (Line(points={{-120,80},{40,80},{40,50},{58,50}},
-        color={0,0,127}));
-  connect(E0.port_b, E1.port_b)
-    annotation (Line(points={{80,50},{88,50},{88,0},{76,0}}, color={191,0,0}));
   connect(A0.port_b, A2.port_a)
-    annotation (Line(points={{-72,0},{-62,0}}, color={191,0,0}));
+    annotation (Line(points={{-64,0},{-54,0}}, color={191,0,0}));
   connect(A2.port_b, B1.port_a)
-    annotation (Line(points={{-42,0},{-30,0}}, color={191,0,0}));
+    annotation (Line(points={{-34,0},{-22,0}}, color={191,0,0}));
   connect(B1.port_b, B24.port_a)
-    annotation (Line(points={{-12,0},{-2,0}}, color={191,0,0}));
+    annotation (Line(points={{-4,0},{6,0}},   color={191,0,0}));
   connect(B24.port_b, C3.port_a)
-    annotation (Line(points={{18,0},{28,0}}, color={191,0,0}));
+    annotation (Line(points={{26,0},{36,0}}, color={191,0,0}));
   connect(C3.port_b, E1.port_a)
-    annotation (Line(points={{48,0},{56,0}}, color={191,0,0}));
-  connect(QRad, A2.QRad) annotation (Line(points={{-120,-80},{-70,-80},{-70,-8},
-          {-64,-8}}, color={0,0,127}));
+    annotation (Line(points={{56,0},{64,0}}, color={191,0,0}));
+  connect(q_ext, A2.q_ext) annotation (Line(points={{-120,-30},{-62,-30},{-62,-3},
+          {-56,-3}}, color={0,0,127}));
+  connect(q_int, E1.q_int) annotation (Line(points={{-120,-80},{56,-80},{56,-8},
+          {62,-8}}, color={0,0,127}));
+  connect(senT_ext.port, A2.port_a) annotation (Line(points={{-50,40},{-58,40},{
+          -58,0},{-54,0}}, color={191,0,0}));
+  connect(senT_ext.T, Ts_ext) annotation (Line(points={{-30,40},{30,40},{30,80},
+          {110,80}}, color={0,0,127}));
+  connect(E1.port_b, senT_int.port) annotation (Line(points={{84,0},{94,0},{94,
+          -40},{74,-40},{74,-60},{76,-60}}, color={191,0,0}));
+  connect(senT_int.T, Ts_int)
+    annotation (Line(points={{96,-60},{110,-60}}, color={0,0,127}));
+  connect(T_ext, temReaCon_ext.T)
+    annotation (Line(points={{-120,30},{-96,30}}, color={0,0,127}));
+  connect(temReaCon_ext.port, A0.port_a) annotation (Line(points={{-74,30},{-68,
+          30},{-68,16},{-92,16},{-92,0},{-84,0}}, color={191,0,0}));
+  connect(T_int, temReaCon_int.T)
+    annotation (Line(points={{-120,80},{-94,80}}, color={0,0,127}));
+  connect(E1.port_b, E0.port_a)
+    annotation (Line(points={{84,0},{94,0},{94,50},{80,50}}, color={191,0,0}));
+  connect(temReaCon_int.port, E0.port_b) annotation (Line(points={{-72,80},{0,80},
+          {0,50},{60,50}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>

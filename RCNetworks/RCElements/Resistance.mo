@@ -1,6 +1,6 @@
 within RCNetworks.RCElements;
-model AirResistance "Convective air resistance at exterior or interior walls"
-  extends RCNetworks.BaseClasses.PartialAirResistanceIcon;
+model Resistance "Resistor"
+  extends RCNetworks.BaseClasses.PartialResistanceIcon;
 
   parameter Modelica.SIunits.ThermalResistance R
     "Constant thermal resistance";
@@ -27,4 +27,4 @@ equation
 This is a R model that has no mass that can be used to represent the air gap between layers.
 </p>
 </html>"));
-end AirResistance;
+end Resistance;
