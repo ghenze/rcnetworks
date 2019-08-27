@@ -61,3 +61,10 @@ Buildings/Resources/src/fluid/heatpumps/calibration/doc/build/doctrees
 *.txt
 *.fmu
 *.png
+
+##OpenModelica results
+################
+*.json
+*.xml
+*.intdata
+*.realdata
