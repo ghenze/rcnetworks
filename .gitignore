@@ -56,3 +56,8 @@ Buildings/Resources/src/fluid/heatpumps/calibration/doc/build/doctrees
 
 ###########################
 *.obj
+
+#########
+*.txt
+*.fmu
+*.png

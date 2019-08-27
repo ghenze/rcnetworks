@@ -13,14 +13,16 @@ The following libraries must be on the MODELICAPATH:
 from pymodelica import compile_fmu
 # DEFINE MODEL
 # ------------
-mopath = 'RCNetworks';
-modelpath = 'RCNetworks.Examples.M3R2C'
+# library path
+mopath = 'RCNetworks'; 
+# model path
+modelpath = 'RCNetworks.Examples.HighThermalMassWall'
 # ------------
 
-# COMPILE FMU: set JVM maximum leap to 5G to avoid memory issues
+# COMPILE FMU: set JVM maximum leap to 1G to avoid memory issues
 # -----------
 #fmupath = parser.export_fmu(modelpath, [mopath])
-fmupath = compile_fmu(modelpath,[mopath], jvm_args='-Xmx5g')
+fmupath = compile_fmu(modelpath,[mopath], jvm_args='-Xmx1g')
 # -----------
 
 
