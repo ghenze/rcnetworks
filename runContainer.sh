@@ -1,5 +1,5 @@
   exec docker run \
- 	  --name control_jmodelica \
+ 	  --name jmodelica \
           --user=root \
 	  --detach=false \
 	  -e DISPLAY=${DISPLAY} \
@@ -9,4 +9,5 @@
 	  -i \
           -t \
 	  bes_control /bin/bash -c "cd /mnt/shared && python /mnt/shared/test.py"
+
     exit $

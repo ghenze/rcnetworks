@@ -1,7 +1,7 @@
-IMG_NAME=bes_control
+IMG_NAME=jmodelica
 
 COMMAND_RUN=docker run \
-	  --name control_jmodelica \
+	  --name bes_control \
 	  --detach=false \
 	  -e DISPLAY=${DISPLAY} \
 	  -v /tmp/.X11-unix:/tmp/.X11-unix \

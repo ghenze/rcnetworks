@@ -1,5 +1,5 @@
   exec docker run \
- 	  --name test \
+ 	  --name bes_control \
           --user=root \
 	  --detach=false \
 	  -e DISPLAY=${DISPLAY} \
@@ -8,5 +8,6 @@
 	  -v `pwd`:/mnt/shared \
 	  -i \
           -t \
-	  fncs /bin/bash -c "cd /mnt/shared && python /mnt/shared/simulate_fmu.py"
+	  jmodelica /bin/bash -c "cd /mnt/shared && python /mnt/shared/simulate_fmu.py"
+	exec docker attach bes_control  
     exit $
