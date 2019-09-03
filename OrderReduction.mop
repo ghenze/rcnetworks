@@ -1,0 +1,98 @@
+package OrderReduction
+
+model RCOrderReduction
+
+  parameter Integer n(min = 1) = 1 "Number of C-elements:";
+  parameter Modelica.SIunits.ThermalResistance RTot = 2
+    "Total thermal resistance without convective air resistors on extorior and interior sides";
+  parameter Modelica.SIunits.HeatCapacity CTot = 300
+    "Total thermal resistance without convective air resistors on extorior and interior sides";
+  parameter Modelica.SIunits.ThermalResistance RA0 = 0.059
+    "Convective air resistors on exterior side";
+  parameter Modelica.SIunits.ThermalResistance RE0 = 0.121
+    "Convective air resistors on interior side";
+
+  parameter Real r[n+1] = fill(1/(n+1),n+1);
+  parameter Real c[n] = fill(1/n,n);
+
+  // Initial temperatures
+  parameter Modelica.SIunits.Temperature T_start=273.15 + 20
+    "Initial temperature of capacities";
+  parameter Modelica.SIunits.Temperature Ts_ext_start=273.15 + 20
+    "Initial temperature of capacities";    
+  parameter Modelica.SIunits.Temperature Ts_int_start=273.15 + 20
+    "Initial temperature of capacities";
+
+ // Inputs
+  Modelica.Blocks.Interfaces.RealInput T_int(final quantity="ThermodynamicTemperature",
+      final displayUnit="degC") "Indoor temperature";
+  Modelica.Blocks.Interfaces.RealInput T_ext(final quantity="ThermodynamicTemperature",
+      final displayUnit="degC") "Outdoor temperature";
+  Modelica.Blocks.Interfaces.RealInput q_ext(final quantity="Power", final
+      displayUnit="W") "Solar radiance";
+  Modelica.Blocks.Interfaces.RealInput q_int(final quantity="Power", final
+      displayUnit="W") "Solar radiance";
+
+ // Outputs
+   Modelica.Blocks.Interfaces.RealOutput Ts_int(
+    final quantity="ThermodynamicTemperature",
+    final displayUnit="degC",
+    start = Ts_int_start)
+    "Interior surface temperature";
+
+  Modelica.Blocks.Interfaces.RealOutput Ts_ext(
+    final quantity="ThermodynamicTemperature",
+    final displayUnit="degC",
+    start = Ts_ext_start)
+   "Exterior surface temperature";
+   
+ // intermediate models
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature temReaCon_int "Temperature connector";
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature temReaCon_ext "Temperature connector";
+  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor senT_ext
+    "Exterior surface temperature sensor";
+
+  RCNetworks.RCElements.Layer rcNet(
+    use_externalQ=true,
+    use_internalQ=true,
+    T_start=T_start,
+    R=(RTot-RA0-RE0)*r,
+    C=CTot*c,
+    n=n)
+    "RC network";
+
+
+  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor senT_int
+    "Exterior surface temperature sensor";
+  RCNetworks.RCElements.Resistance  A0(
+    R=RA0);
+  RCNetworks.RCElements.Resistance E0(R=RE0);
+  
+equation
+  connect(T_int, temReaCon_int.T);
+  connect(T_ext, temReaCon_ext.T);
+  connect(senT_ext.T, Ts_ext);
+  connect(senT_int.T,Ts_int);
+  connect(q_ext, rcNet.q_ext);
+  connect(q_int, rcNet.q_int);
+  connect(A0.port_b, rcNet.port_a);
+  connect(temReaCon_ext.port, A0.port_a);
+  connect(rcNet.port_b, E0.port_a);
+  connect(E0.port_b, temReaCon_int.port);
+  connect(senT_ext.port, rcNet.port_a);
+  connect(rcNet.port_b, senT_int.port);
+end RCOrderReduction;
+
+optimization reduceOrder(startTime=0, finalTime = 1200)
+	
+	extends RCOrderReduction(
+		r(each free=true, each min=0, each max=1),
+		c(each free=true, each min=0, each max=1));
+
+constraint
+	sum(r) = 1;
+	sum(c) = 1;
+	
+end reduceOrder;
+
+end OrderReduction;
