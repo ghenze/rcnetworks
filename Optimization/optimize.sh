@@ -8,5 +8,6 @@
 	  -v `pwd`:/mnt/shared \
 	  -i \
           -t \
-	  jmodelica /bin/bash -c "cd /mnt/shared && python /mnt/shared/compile_fmu.py"
+	  jmodelica /bin/bash -c "cd /mnt/shared && python /mnt/shared/optimize.py"
+	exec docker attach bes_control  
     exit $
