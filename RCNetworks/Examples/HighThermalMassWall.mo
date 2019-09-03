@@ -13,7 +13,7 @@ model HighThermalMassWall
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   Modelica.Blocks.Sources.Constant q_ext(k=0)
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
-  Modelica.Blocks.Sources.Constant q_int(k=100)
+  Modelica.Blocks.Sources.Constant q_int(k=0)
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
 equation
   connect(T_int.y, wal.T_int) annotation (Line(points={{-59,50},{-20,50},{-20,8},
