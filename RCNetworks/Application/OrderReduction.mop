@@ -77,6 +77,16 @@ equation
   connect(rcNet.port_b, senT_int.port);
 end RCOrderReduction;
 
-optimization 
+optimization reduceOrder(startTime=0, finalTime = 1200)
+	
+	extends RCOrderReduction(
+		r(free=true, min=0, max=1),
+		c(free=true, min=0, max=1))
+
+	constraint 
+	sum(r) = 1;
+	sum(c) = 1;
+	
+end reduceOrder
 
 end OrderReduction;
