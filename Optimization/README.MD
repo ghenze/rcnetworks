@@ -1,13 +1,14 @@
-# folder structure
--*baseline*: this is a folder, which contains baseline data for calibration of model order reduction problem. 
+# Folder Structure
+Necessary files are included in this folder:
 
--*.mo: a basic Modelica RC model. The order of the RC model needs to be optimized.
+- ***Measure.csv***: measurement data from the simulation results of your high fidelity model.
 
--*\*.fmu*: FMU model compiled from Modleica model *\*.mo*. 
+- ***OrderReduction.mop***: optimization formulation of the model order reduction problem.
 
--*compile_fmu.py*: a Python script that compiles \*.mo file into \*.fmu file in a JModelica environment.
+- ***Optimize.py***: python script that solves the optimization problem. Used for Windows OS.
 
--*compile_fmu.sh*: a Bash script that calls JModelica environment installed in a docker container and executes *compile_fmu.py*.
+- ***Optimize.sh***: shell script that solves the optimization problem. Used for docker container in Mac OS.
+
 
 
 
