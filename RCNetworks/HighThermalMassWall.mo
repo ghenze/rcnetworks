@@ -9,28 +9,28 @@ model HighThermalMassWall
     R=0.059)
     annotation (Placement(transformation(extent={{-84,-10},{-64,10}})));
   RCElements.Layer A2(
-    R={0.076,0.076}/2,
-    C={187.22},
+    
+    C={187.22} * 1000,R={0.076,0.076}/2,
     T_start=T_start,
     use_externalQ=true)
     annotation (Placement(transformation(extent={{-54,-10},{-34,12}})));
   RCElements.Resistance B1(R=0.16)
     annotation (Placement(transformation(extent={{-22,-10},{-4,10}})));
   RCElements.Layer B24(
-    C={5.33},
-    T_start=T_start,
-    R={1.584,1.584}/2)
+    C={5.33} * 1000,
+    R={1.584,1.584}/2,
+    T_start=T_start)
     annotation (Placement(transformation(extent={{6,-10},{26,12}})));
   RCElements.Layer C3(
-    C={83.21},
-    T_start=T_start,
-    R={0.125,0.125}/2)
+    C={83.21} * 1000,
+    R={0.125,0.125}/2,
+    T_start=T_start)
     annotation (Placement(transformation(extent={{36,-10},{56,12}})));
   RCElements.Layer E1(
-    T_start=T_start,
-    R={0.013,0.013},
-    use_internalQ=true,
-    C={25.82}) annotation (Placement(transformation(extent={{64,-10},{84,12}})));
+    
+    C={25.82} * 1000,
+    R={0.013,0.013},T_start=T_start,
+    use_internalQ=true) annotation (Placement(transformation(extent={{64,-10},{84,12}})));
   RCElements.Resistance E0(R=0.121)
     annotation (Placement(transformation(extent={{80,40},{60,60}})));
 

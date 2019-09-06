@@ -10,26 +10,26 @@ model LowThermalMassWall "Low thermal mass wall"
     R=0.059)
     annotation (Placement(transformation(extent={{-88,-10},{-68,10}})));
   RCElements.Capacitance                                 A3(
-    T_start=T_start,
-    use_externalQ=true,
-    C={4.92})
+    
+    C={4.92} * 1000,T_start=T_start,
+    use_externalQ=true)
     annotation (Placement(transformation(extent={{-62,-10},{-44,10}})));
   RCElements.Resistance B1_1(R=0.16)
     annotation (Placement(transformation(extent={{46,-10},{64,10}})));
   RCElements.Layer B24(
-    C={5.33},
-    T_start=T_start,
-    R={1.584,1.584}/2)
+    C={5.33} * 1000,
+    R={1.584,1.584}/2,
+    T_start=T_start)
     annotation (Placement(transformation(extent={{-10,-10},{8,12}})));
   RCElements.Layer C2(
-    T_start=T_start,
-    R={0.266,0.266}/2,
-    C={52.06})
+    
+    C={52.06} * 1000,
+    R={0.266,0.266}/2,T_start=T_start)
     annotation (Placement(transformation(extent={{18,-10},{38,12}})));
   RCElements.Layer E2(
-    T_start=T_start,
-    R={0.009,0.009}/2,
-    C={9.42},
+    
+    C={9.42} * 1000,
+    R={0.009,0.009}/2,T_start=T_start,
     use_internalQ=true)
                annotation (Placement(transformation(extent={{70,-10},{90,12}})));
   RCElements.Resistance               E0(R=0.121)

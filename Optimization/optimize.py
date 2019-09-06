@@ -20,7 +20,7 @@ from buildingspy.io.outputfile import Reader
 
 import os
 from collections import OrderedDict
-from scipy.io.matlab.mio import loadmat 
+from scipy.io.matlab.mio import loadmat
 import numpy as N
 from pymodelica import compile_fmu
 from pyfmi import load_fmu
@@ -48,7 +48,7 @@ finalTime = 1200
 ## Load measurement data from file
 meas = pd.read_csv('measure.csv', index_col=[0])
 
-#extract data series
+# Extract data series
 t_mea = meas.index
 T_ext_mea = meas['T_ext']
 T_int_mea = meas['T_int']
@@ -75,7 +75,6 @@ plt.grid(True)
 plt.hold(True)
 plt.show()
 
-
 # Set initial states in model, which are stored in the optimization problem
 x_0_names = ['T_start', 'Ts_ext_start', 'Ts_int_start']
 x_0_values = op.get(x_0_names)
@@ -89,15 +88,15 @@ model.set(x_0_names, x_0_values)
 # Inputs for the optimization model
 u = N.transpose(N.vstack([t_mea, T_int_mea, T_ext_mea, q_int_mea, q_ext_mea]))
 
-# now let's simulate the model with defaulted parameters: before simulation
+# Now let's simulate the model with default parameters: before simulation
 res_sim = model.simulate(input=(['T_int', 'T_ext', 'q_int', 'q_ext'], u), start_time=startTime, final_time=finalTime)
 
-# load simulation results
+# Load simulation results
 t_sim = res_sim['time']
 Ts_ext_sim = res_sim['Ts_ext']
 Ts_int_sim = res_sim['Ts_int']
 
-# plot simulation results
+# Plot simulation results
 plt.figure(2)
 plt.subplot(211)
 plt.plot(t_sim, Ts_int_sim-273.15, 'r',label = 'Simulation')
@@ -106,9 +105,8 @@ plt.plot(t_sim, Ts_ext_sim-273.15, 'r',label = 'Simulation')
 plt.hold(True)
 plt.show()
 
-'''Clearly, there is a mismatch in the response, especially
-for the two lower tanks. 
-This is why we need calibration by tuning some parameters.
+'''Clearly, there is a mismatch in the response, which is
+why we need calibration by tuning some parameters.
 '''
 
 # Create external data object for optimization
@@ -145,7 +143,7 @@ Ts_ext_opt = res['Ts_ext']
 Ts_int_opt = res['Ts_int']
 t_opt = res['time']
 
-# plot calibrated results
+# Plot calibrated results
 plt.figure(2)
 plt.subplot(211)
 plt.plot(t_opt, Ts_int_opt-273.15, 'go',markersize=2,label = 'Calibration')
@@ -154,18 +152,18 @@ plt.plot(t_opt, Ts_ext_opt-273.15, 'go',markersize=2,label = 'Calibration')
 plt.savefig('result_cal_order'+str(n)+'.eps')
 plt.show()
 
-# calculate RMSE
+# Calculate RMSE and CVRSE
 def RMSE(y_true,y_predict):
     # numpy array
     rmse = np.sqrt(N.sum(N.square(y_true-y_predict))/len(y_true))
     return rmse
-    
+
 def CVRMSE(y_true,y_predict):
     # numpy array
     rmse = RMSE(y_true,y_predict)
     m = N.mean(y_true)
     return rmse/max(0.00001,abs(m))
-    
+
 y_true=N.append(Ts_ext_mea.array, Ts_int_mea.array)
 
 intp = interpolate.interp1d(t_opt,Ts_ext_opt, kind='linear')
@@ -174,7 +172,7 @@ intp = interpolate.interp1d(t_opt,Ts_int_opt, kind='linear')
 Ts_int_opt_intp = intp(t_mea)
 y_predict = N.append(Ts_ext_opt_intp, Ts_int_opt_intp)
 print(y_true.shape)
-print(y_predict.shape)     
+print(y_predict.shape)
 
 cvrmse = CVRMSE(y_true,y_predict)
 r2 = r2_score(y_true,y_predict)

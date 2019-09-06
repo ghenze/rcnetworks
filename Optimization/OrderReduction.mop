@@ -2,15 +2,15 @@ package OrderReduction
 
 model RCOrderReduction
 
-  parameter Integer n(min = 1) = 3 "Number of C-elements:";
+  parameter Integer n(min = 1) = 1 "Number of C-elements:";
   parameter Modelica.SIunits.ThermalResistance RTot = 2
-    "Total thermal resistance without convective air resistors on extorior and interior sides";
-  parameter Modelica.SIunits.HeatCapacity CTot = 300
-    "Total thermal resistance without convective air resistors on extorior and interior sides";
+    "Total conductive thermal resistance without the convective air resistance on either exterior or interior side";
+  parameter Modelica.SIunits.HeatCapacity CTot = 300000
+    "Total thermal capacitance of the physical layers";
   parameter Modelica.SIunits.ThermalResistance RA0 = 0.059
-    "Convective air resistors on exterior side";
+    "Convective air resistance on exterior side";
   parameter Modelica.SIunits.ThermalResistance RE0 = 0.121
-    "Convective air resistors on interior side";
+    "Convective air resistance on interior side";
 
   parameter Real r[n+1] = fill(1/(n+1),n+1);
   parameter Real c[n] = fill(1/n,n);
@@ -19,7 +19,7 @@ model RCOrderReduction
   parameter Modelica.SIunits.Temperature T_start=273.15 + 20
     "Initial temperature of capacities";
   parameter Modelica.SIunits.Temperature Ts_ext_start=273.15 + 20
-    "Initial temperature of capacities";    
+    "Initial temperature of capacities";
   parameter Modelica.SIunits.Temperature Ts_int_start=273.15 + 20
     "Initial temperature of capacities";
 
@@ -45,7 +45,7 @@ model RCOrderReduction
     final displayUnit="degC",
     start = Ts_ext_start)
    "Exterior surface temperature";
-   
+
  // intermediate models
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature temReaCon_int "Temperature connector";
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature temReaCon_ext "Temperature connector";
@@ -61,13 +61,12 @@ model RCOrderReduction
     n=n)
     "RC network";
 
-
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor senT_int
     "Exterior surface temperature sensor";
   RCNetworks.RCElements.Resistance  A0(
     R=RA0);
   RCNetworks.RCElements.Resistance E0(R=RE0);
-  
+
 equation
   connect(T_int, temReaCon_int.T);
   connect(T_ext, temReaCon_ext.T);
@@ -84,7 +83,7 @@ equation
 end RCOrderReduction;
 
 optimization reduceOrder(startTime=0, finalTime = 1200)
-	
+
 	extends RCOrderReduction(
 		r(each free=true, each min=0, each max=1),
 		c(each free=true, each min=0, each max=1));
@@ -92,7 +91,7 @@ optimization reduceOrder(startTime=0, finalTime = 1200)
 constraint
 	sum(r) = 1;
 	sum(c) = 1;
-	
+
 end reduceOrder;
 
 end OrderReduction;
