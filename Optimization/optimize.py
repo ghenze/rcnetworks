@@ -6,6 +6,9 @@ overwrite block parser.
 The following libraries must be on the MODELICAPATH:
 
 - RCNetworks
+- intepolation 
+- output surface temperaure for CSV
+- RMSE in the results
 
 """
 # import numerical package
@@ -43,7 +46,7 @@ print(n)
 
 ## experiment time
 startTime = 0
-finalTime = 1200
+finalTime = 172800
 
 ## Load measurement data from file
 meas = pd.read_csv('measure.csv', index_col=[0])
@@ -140,8 +143,11 @@ print('Optimal c is: ' + str(c_opt))
 
 ### Plot the optimization case
 Ts_ext_opt = res['Ts_ext']
+Ts_ext_opt[0] = Ts_ext_mea[0] # temporary solution for popping out the first crazy element. Need debug the model.
 Ts_int_opt = res['Ts_int']
+Ts_int_opt[0] = Ts_int_mea[0]
 t_opt = res['time']
+
 
 # Plot calibrated results
 plt.figure(2)
@@ -149,8 +155,11 @@ plt.subplot(211)
 plt.plot(t_opt, Ts_int_opt-273.15, 'go',markersize=2,label = 'Calibration')
 plt.subplot(212)
 plt.plot(t_opt, Ts_ext_opt-273.15, 'go',markersize=2,label = 'Calibration')
+plt.legend()
 plt.savefig('result_cal_order'+str(n)+'.eps')
 plt.show()
+
+
 
 # Calculate RMSE and CVRSE
 def RMSE(y_true,y_predict):
@@ -173,10 +182,15 @@ Ts_int_opt_intp = intp(t_mea)
 y_predict = N.append(Ts_ext_opt_intp, Ts_int_opt_intp)
 print(y_true.shape)
 print(y_predict.shape)
+## Ouput calibrated data as csv
+Ts_opt=pd.DataFrame({'Ts_ext':Ts_ext_opt_intp,'Ts_int':Ts_int_opt_intp}, index=t_mea)
+Ts_opt.to_csv('Calibrated-results.csv')
 
+# calculate metrics
+rmse = RMSE(y_true,y_predict)
 cvrmse = CVRMSE(y_true,y_predict)
 r2 = r2_score(y_true,y_predict)
 
-results = {'r2':r2,'cvrmse':cvrmse,'n':n, 'r_opt':r_opt.tolist(), 'c_opt':c_opt.tolist()}
+results = {'r2':r2,'cvrmse':cvrmse,'rmse':rmse,'n':n, 'r_opt':r_opt.tolist(), 'c_opt':c_opt.tolist()}
 with open('results'+'_order'+str(n)+'.txt','w') as outputfile:
     json.dump(results,outputfile)
