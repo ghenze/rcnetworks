@@ -46,7 +46,7 @@ print(n)
 
 ## experiment time
 startTime = 0
-finalTime = 172800
+finalTime = 1200
 
 ## Load measurement data from file
 meas = pd.read_csv('measure.csv', index_col=[0])
