@@ -149,12 +149,18 @@ Ts_int_opt[0] = Ts_int_mea[0]
 t_opt = res['time']
 
 
+#
+intp = interpolate.interp1d(t_opt,Ts_ext_opt, kind='linear')
+Ts_ext_opt_intp = intp(t_mea)
+intp = interpolate.interp1d(t_opt,Ts_int_opt, kind='linear')
+Ts_int_opt_intp = intp(t_mea)
+
 # Plot calibrated results
 plt.figure(2)
 plt.subplot(211)
-plt.plot(t_opt, Ts_int_opt-273.15, 'go',markersize=2,label = 'Calibration')
+plt.plot(t_mea, Ts_int_opt_intp-273.15, 'go',markersize=2,label = 'Calibration')
 plt.subplot(212)
-plt.plot(t_opt, Ts_ext_opt-273.15, 'go',markersize=2,label = 'Calibration')
+plt.plot(t_mea, Ts_ext_opt_intp-273.15, 'go',markersize=2,label = 'Calibration')
 plt.legend()
 plt.savefig('result_cal_order'+str(n)+'.eps')
 plt.show()
@@ -175,10 +181,7 @@ def CVRMSE(y_true,y_predict):
 
 y_true=N.append(Ts_ext_mea.array, Ts_int_mea.array)
 
-intp = interpolate.interp1d(t_opt,Ts_ext_opt, kind='linear')
-Ts_ext_opt_intp = intp(t_mea)
-intp = interpolate.interp1d(t_opt,Ts_int_opt, kind='linear')
-Ts_int_opt_intp = intp(t_mea)
+
 y_predict = N.append(Ts_ext_opt_intp, Ts_int_opt_intp)
 print(y_true.shape)
 print(y_predict.shape)
